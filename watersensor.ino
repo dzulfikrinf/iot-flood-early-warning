@@ -4,9 +4,9 @@
  * ==============================================================
  */
 
-#define BLYNK_TEMPLATE_ID "TMPL623TgZqsa"
-#define BLYNK_TEMPLATE_NAME "Flood Early Warning System"
-#define BLYNK_AUTH_TOKEN "Bv4nHKTsFMlZwXf2p15n8Q6p6womgCG_" 
+#define BLYNK_TEMPLATE_ID "ID_TEMPLATE_BLYNK"
+#define BLYNK_TEMPLATE_NAME "NAMA TEMPLATE BLYNK"
+#define BLYNK_AUTH_TOKEN "AUTH TOKEN TEMPLATE BLYNK" 
 #define BLYNK_PRINT Serial 
 
 #include <WiFi.h>
@@ -17,11 +17,11 @@
 // --------------------------------------------------------------
 // KONFIGURASI
 // --------------------------------------------------------------
-String botToken = "8304293045:AAHONJR2aNMpSOOns2RS-lTd8AcV2g3Xv1k"; 
-String chatID   = "@awasadabanjir"; // Pastikan Bot sudah jadi ADMIN di channel ini
+String botToken = "BOT_TOKEN_TELEGRAM"; 
+String chatID   = "ID_CHANNEL_TELEGRAM"; 
 
-char ssid[] = "Atlas";
-char pass[] = "anjaymabar7272";
+char ssid[] = "Nama Wifi";
+char pass[] = "Password Wifi";
 
 #define PIN_WATER_LEVEL 34 
 #define PIN_RAIN_SENSOR 35 
@@ -54,9 +54,8 @@ bool isHeavyRain = false;
 bool isMildRain = false;    
 
 // --------------------------------------------------------------
-// FUNGSI TAMBAHAN: URL ENCODE (WAJIB ADA BIAR TELEGRAM SUKSES)
+// FUNGSI URL ENCODE
 // --------------------------------------------------------------
-// Fungsi ini mengubah spasi menjadi %20, enter jadi %0A, dll.
 String urlEncode(String value) {
   String encodedString = "";
   char c;
@@ -86,17 +85,15 @@ String urlEncode(String value) {
 }
 
 // --------------------------------------------------------------
-// FUNGSI PENGIRIM TELEGRAM (SUDAH DIPERBAIKI)
+// FUNGSI PENGIRIM TELEGRAM
 // --------------------------------------------------------------
 void sendTelegram(String message) {
   HTTPClient http;
   WiFiClientSecure client;
   client.setInsecure(); 
   
-  // 1. Encode Pesan agar spasi & emoji aman dikirim
   String encodedMsg = urlEncode(message);
   
-  // 2. Susun URL dengan Mode Markdown (Agar huruf tebal jalan)
   String url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatID + "&text=" + encodedMsg + "&parse_mode=Markdown";
   
   http.begin(client, url); 
@@ -165,8 +162,6 @@ void sendSensorData() {
     txtHujan  = isValidRain ? "HUJAN" : "CERAH";
     
     if (!isBahaya) {
-      // Gunakan \n untuk enter (karena sudah ada urlEncode)
-      // Gunakan *text* untuk Bold (karena sudah ada parse_mode=Markdown)
       String msg = "🔴 **PERINGATAN DARURAT (EMERGENCY)** 🔴\n";
       msg += "\n----------------------------------------\n";
       msg += "⚠️ **Awas Potensi Banjir Tinggi!**\n";
